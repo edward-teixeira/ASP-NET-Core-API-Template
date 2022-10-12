@@ -1,9 +1,9 @@
-using Microsoft.EntityFrameworkCore.Migrations;
-
 #nullable disable
 
 namespace WebApi.Migrations
 {
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -19,10 +19,7 @@ namespace WebApi.Migrations
                     CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_cars", x => x.Id);
-                });
+                constraints: table => table.PrimaryKey("PK_cars", x => x.Id));
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
