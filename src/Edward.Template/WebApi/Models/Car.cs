@@ -10,6 +10,6 @@ namespace WebApi.Models
 
         public string Model { get; set; } = default!;
 
-        public CarViewModel ToViewModel() => new (Id, Cylinders, Make, Model);
+        public CarViewModel ToViewModel() => new(Id, Cylinders, Make, Model);
     }
 }
