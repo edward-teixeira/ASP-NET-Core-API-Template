@@ -1,7 +1,7 @@
 namespace WebApi.Services
 {
+    using Extensions;
     using Microsoft.Extensions.Caching.Memory;
-    using WebApi.Extensions;
 
     public sealed class CacheService : ICacheService
     {

@@ -1,11 +1,12 @@
 namespace WebApi.Data.Configuration
 {
     using Microsoft.EntityFrameworkCore;
-    using WebApi.Models;
+    using Microsoft.EntityFrameworkCore.Metadata.Builders;
+    using Models;
 
     public class CarConfiguration : EntityConfigurationBase<Car>
     {
-        public override void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Car> builder)
+        public override void Configure(EntityTypeBuilder<Car> builder)
         {
             ArgumentNullException.ThrowIfNull(builder);
             builder.ToTable("cars");

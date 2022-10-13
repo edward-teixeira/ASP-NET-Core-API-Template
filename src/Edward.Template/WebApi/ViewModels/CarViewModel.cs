@@ -1,14 +1,14 @@
 namespace WebApi.ViewModels
 {
     /// <summary>
-    /// A make and model of car.
+    ///     A make and model of car.
     /// </summary>
     public record CarViewModel
     {
         #region Ctor
 
         /// <summary>
-        /// CarViewModel constructor
+        ///     CarViewModel constructor
         /// </summary>
         /// <param name="carId"></param>
         /// <param name="cylinders"></param>
@@ -27,31 +27,31 @@ namespace WebApi.ViewModels
         #endregion Ctor
 
         /// <summary>
-        /// Gets or sets the cars unique identifier.
+        ///     Gets or sets the cars unique identifier.
         /// </summary>
         /// <example>1</example>
         public Guid CarId { get; init; }
 
         /// <summary>
-        /// Gets or sets the number of cylinders in the cars engine.
+        ///     Gets or sets the number of cylinders in the cars engine.
         /// </summary>
         /// <example>6</example>
         public int Cylinders { get; init; }
 
         /// <summary>
-        /// Gets or sets the make of the car.
+        ///     Gets or sets the make of the car.
         /// </summary>
         /// <example>Honda</example>
         public string Make { get; init; } = default!;
 
         /// <summary>
-        /// Gets or sets the model of the car.
+        ///     Gets or sets the model of the car.
         /// </summary>
         /// <example>Civic</example>
         public string Model { get; init; } = default!;
 
         /// <summary>
-        /// Gets or sets the URL used to retrieve the resource conforming to REST'ful JSON http://restfuljson.org/.
+        ///     Gets or sets the URL used to retrieve the resource conforming to REST'ful JSON http://restfuljson.org/.
         /// </summary>
         /// <example>/cars/1</example>
         public Uri? Url { get; init; }

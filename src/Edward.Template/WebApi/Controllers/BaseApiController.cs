@@ -1,9 +1,9 @@
 namespace WebApi.Controllers
 {
+    using Data;
     using Microsoft.AspNetCore.Mvc;
-    using WebApi.Extensions;
-    using WebApi.Models;
-    using WebApi.Services;
+    using Microsoft.EntityFrameworkCore;
+    using Services;
 
     /// <summary>
     ///     Api Controller Base
@@ -13,40 +13,43 @@ namespace WebApi.Controllers
     [Route("api/v1/[controller]")]
     [Produces("application/json", "application/xml")]
     [Consumes("application/json", "application/xml")]
-    public abstract class BaseApiController : ControllerBase
+    public abstract class BaseApiController<TEntity> : ControllerBase where TEntity : class, new()
     {
-        private const string CarListCacheKey = "CarsList";
         private static readonly SemaphoreSlim s_sSemaphore = new(1, 1);
         private readonly ICacheService _cacheService;
-        protected readonly ILogger<BaseApiController> Logger;
+        protected readonly AppDbContext Context;
+        protected readonly ILogger<BaseApiController<TEntity>> Logger;
 
         protected BaseApiController(
             ICacheService cacheService,
-            ILogger<BaseApiController> logger)
+            ILogger<BaseApiController<TEntity>> logger, AppDbContext context)
         {
             _cacheService = cacheService;
             Logger = logger;
+            Context = context;
         }
 
-        private async Task<IActionResult> Index()
+        /// <summary>
+        ///     Try to retrieve data from the cacheService.
+        ///     If the value is not present, it queries the database and add to the cacheStore before returning.
+        /// </summary>
+        /// <param name="cacheKey"></param>
+        /// <param name="cancellationToken"></param>
+        protected async Task<IEnumerable<TEntity>> GetFromCacheStoreAsync(string cacheKey,
+            CancellationToken cancellationToken)
         {
-            // MemoryCache example
             try
             {
-                await s_sSemaphore.WaitAsync().ConfigureAwait(false);
-                var value = _cacheService.Get<IEnumerable<Car>>(CarListCacheKey);
+                var data = Enumerable.Empty<TEntity>();
+                await s_sSemaphore.WaitAsync(cancellationToken).ConfigureAwait(false);
 
-                if (value != null) { return Ok(value.ToList()); }
+                data = await _cacheService.GetAsync<IEnumerable<TEntity>>(cacheKey).ConfigureAwait(false);
+                if (data != null) { return data; }
 
-                // value = await _context!.DbSet.ToListAsync().ConfigureAwait(false) as IEnumerable<Product>;
-                await _cacheService.SetAsync(CarListCacheKey, value, TimeSpan.FromSeconds(2400));
+                data = await Context.Set<TEntity>().AsNoTracking().ToListAsync(cancellationToken).ConfigureAwait(false);
+                _ = await _cacheService.SetAsync(cacheKey, data, TimeSpan.FromSeconds(2400)).ConfigureAwait(false);
 
-                return Ok(value);
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError("{ErrorMessage}", ex.ToStringFormatted());
-                throw;
+                return data;
             }
             finally
             {

@@ -1,6 +1,6 @@
 namespace WebApi.Models
 {
-    using WebApi.ViewModels;
+    using ViewModels;
 
     public class Car : EntityBase
     {

@@ -1,6 +1,5 @@
 namespace WebApi.Exceptions
 {
-    using System;
     using System.Runtime.Serialization;
 
     /// <inheritdoc />

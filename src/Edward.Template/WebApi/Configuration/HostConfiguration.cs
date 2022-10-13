@@ -1,7 +1,6 @@
 namespace WebApi.Configuration
 {
     using System.Reflection;
-    using Microsoft.Extensions.Hosting;
 
     public static class HostConfiguration
     {

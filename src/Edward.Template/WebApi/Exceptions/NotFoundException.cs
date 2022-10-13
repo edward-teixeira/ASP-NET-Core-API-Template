@@ -1,7 +1,5 @@
 namespace WebApi.Exceptions
 {
-    using System;
-
     /// <inheritdoc />
     [Serializable]
     public class NotFoundException : Exception

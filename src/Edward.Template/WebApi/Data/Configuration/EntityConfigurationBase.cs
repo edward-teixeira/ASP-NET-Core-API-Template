@@ -2,7 +2,7 @@ namespace WebApi.Data.Configuration
 {
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
-    using WebApi.Models;
+    using Models;
 
     public abstract class EntityConfigurationBase<TEntity> : IEntityTypeConfiguration<TEntity>
         where TEntity : EntityBase

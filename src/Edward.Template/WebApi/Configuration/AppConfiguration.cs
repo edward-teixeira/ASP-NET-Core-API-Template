@@ -1,16 +1,17 @@
 namespace WebApi.Configuration
 {
+    using Data;
     using Microsoft.EntityFrameworkCore;
-    using WebApi.Data;
-    using WebApi.Services;
+    using Services;
 
     public static class AppConfiguration
     {
-        public static IServiceCollection ConfigureAppServices(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection ConfigureAppServices(this IServiceCollection services,
+            IConfiguration configuration)
         {
             services.AddDbContext<AppDbContext>(
                 o => o.UseSqlServer(configuration.GetConnectionString("SqlServer"),
-            optionsBuilder => optionsBuilder.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName)));
+                    optionsBuilder => optionsBuilder.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName)));
 
             services
                 .AddScoped<DbContext>(provider => provider.GetRequiredService<AppDbContext>())

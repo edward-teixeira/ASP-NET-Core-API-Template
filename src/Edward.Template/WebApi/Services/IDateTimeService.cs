@@ -1,7 +1,7 @@
 namespace WebApi.Services
 {
     /// <summary>
-    /// DateTime Service
+    ///     DateTime Service
     /// </summary>
     public interface IDateTimeService
     {

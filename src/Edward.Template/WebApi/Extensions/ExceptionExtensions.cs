@@ -1,7 +1,7 @@
 namespace WebApi.Extensions
 {
     using System.Security;
-    using WebApi.Helpers;
+    using Helpers;
 
     /// <summary>
     ///     Exception Helpers utility methods
@@ -68,8 +68,7 @@ namespace WebApi.Extensions
             exception.FromHierarchy(ex => ex.InnerException)
                 .Select(ex => new
                 {
-                    ex.Message,
-                    StackTrace = string.IsNullOrEmpty(ex.StackTrace) ? ex.StackTrace : "NONE"
+                    ex.Message, StackTrace = string.IsNullOrEmpty(ex.StackTrace) ? ex.StackTrace : "NONE"
                 })
                 .Select(c => (c.Message, c.StackTrace))
                 .ToList();

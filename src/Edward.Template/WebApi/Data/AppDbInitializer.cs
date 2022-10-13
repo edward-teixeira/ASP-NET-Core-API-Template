@@ -1,7 +1,7 @@
 namespace WebApi.Data
 {
     using Microsoft.EntityFrameworkCore;
-    using WebApi.Models;
+    using Models;
 
     public class AppDbInitializer
     {
@@ -49,15 +49,11 @@ namespace WebApi.Data
             if (_context.Cars.Any())
             {
                 var productList = new List<Car>();
-                productList.Add(new Car
-                {
-                    Id = Guid.NewGuid(),
-                    Model = "Civic",
-                    Make = "Honda"
-                });
+                productList.Add(new Car { Id = Guid.NewGuid(), Model = "Civic", Make = "Honda" });
 
                 _context.AddRange(productList);
             }
+
             return _context.SaveChangesAsync();
         }
     }

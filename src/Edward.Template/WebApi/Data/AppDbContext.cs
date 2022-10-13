@@ -2,16 +2,16 @@ namespace WebApi.Data
 {
     using System.Reflection;
     using Microsoft.EntityFrameworkCore;
-    using WebApi.Models;
+    using Models;
 
     public class AppDbContext : DbContext
     {
-        public DbSet<Car> Cars { get; set; }
-
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
         }
+
+        public DbSet<Car> Cars { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -44,8 +44,8 @@ namespace WebApi.Data
                     case EntityState.Added:
                         entityEntry.Entity.CreatedAtUtc = DateTime.UtcNow;
                         break;
-                        // case EntityState.Detached: break; case EntityState.Unchanged: break; case
-                        // EntityState.Deleted: break; default: throw new NotImplementedException();
+                    // case EntityState.Detached: break; case EntityState.Unchanged: break; case
+                    // EntityState.Deleted: break; default: throw new NotImplementedException();
                 }
             }
 

@@ -11,7 +11,7 @@ namespace WebApi.Configuration
         /// <param name="builder"></param>
         public static IHostBuilder ConfigureLogger(this IHostBuilder hostBuilder, WebApplicationBuilder builder)
         {
-            var configuredLogger = new Serilog.LoggerConfiguration()
+            var configuredLogger = new LoggerConfiguration()
                 .ReadFrom.Configuration(builder.Configuration)
                 .Enrich.WithProperty("Application", builder.Environment.ApplicationName)
                 .Enrich.WithProperty("Environment", builder.Environment.EnvironmentName)

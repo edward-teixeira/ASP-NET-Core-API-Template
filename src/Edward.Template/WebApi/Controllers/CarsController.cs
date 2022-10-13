@@ -1,38 +1,37 @@
 namespace WebApi.Controllers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
+    using Data;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
-    using WebApi.Data;
-    using WebApi.Models;
-    using WebApi.Services;
+    using Models;
+    using Services;
 
     [AllowAnonymous]
-    public class CarsController : BaseApiController
+    public class CarsController : BaseApiController<Car>
     {
-        private readonly AppDbContext _context;
+        private const string CarListCacheKey = "CarsList";
 
         public CarsController(AppDbContext context, ICacheService cacheService, ILogger<CarsController> logger)
-            : base(cacheService, logger)
+            : base(cacheService, logger, context)
         {
-            _context = context;
         }
 
         /// <summary>
-        /// Get Cars
+        ///     Get Cars
         /// </summary>
         /// <param name="cancellationToken"></param>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<Car>>> GetCars(CancellationToken cancellationToken)
-            => Ok(await _context.Cars.AsNoTracking().ToListAsync(cancellationToken).ConfigureAwait(false));
+        {
+            var entities = await GetFromCacheStoreAsync(CarListCacheKey, cancellationToken).ConfigureAwait(false);
+            return Ok(entities);
+        }
 
         /// <summary>
-        /// Get Car
+        ///     Get Car
         /// </summary>
         /// <param name="id"></param>
         /// <param name="cancellationToken"></param>
@@ -42,10 +41,14 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<Car>> GetCar(Guid id, CancellationToken cancellationToken)
         {
-            var car = await _context.Cars.FindAsync(new object?[] { id, cancellationToken }, cancellationToken: cancellationToken).ConfigureAwait(false);
-            if (car is null) { return NotFound(); }
+            var entity = await Context.Cars.FirstOrDefaultAsync(e => e.Id == id, cancellationToken)
+                .ConfigureAwait(false);
+            if (entity is null)
+            {
+                return NotFound();
+            }
 
-            return Ok(car);
+            return Ok(entity);
         }
     }
 }

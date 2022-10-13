@@ -1,10 +1,9 @@
 namespace WebApi.Middlewares
 {
     using System.Net;
+    using Exceptions;
+    using Extensions;
     using Microsoft.AspNetCore.Mvc;
-    using WebApi.Exceptions;
-    using WebApi.Extensions;
-    using ValidationException = Exceptions.ValidationException;
 
     /// <summary>
     ///     Global exception handler middleware.

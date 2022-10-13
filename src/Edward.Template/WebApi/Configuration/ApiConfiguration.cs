@@ -7,7 +7,8 @@ namespace WebApi.Configuration
 
     public static class ApiConfiguration
     {
-        public static IServiceCollection ConfigureApiServices(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection ConfigureApiServices(this IServiceCollection services,
+            IConfiguration configuration)
         {
             // Disable default ModelState validation behavior
             // See more https://learn.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.mvc.apibehavioroptions
@@ -24,7 +25,7 @@ namespace WebApi.Configuration
 
             services
                 .AddControllers(
-                o => o.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true)
+                    o => o.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true)
                 .AddJsonOptions(jsonOptions =>
                 {
                     jsonOptions.JsonSerializerOptions.WriteIndented = true;
