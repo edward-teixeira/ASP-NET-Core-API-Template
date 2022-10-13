@@ -6,6 +6,7 @@ namespace WebApi.Controllers
     using Microsoft.EntityFrameworkCore;
     using Models;
     using Services;
+    using WebApi.ViewModels;
 
     [AllowAnonymous]
     public class CarsController : BaseApiController<Car>
@@ -24,10 +25,10 @@ namespace WebApi.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IEnumerable<Car>>> GetCars(CancellationToken cancellationToken)
+        public async Task<ActionResult<IEnumerable<CarViewModel>>> GetCars(CancellationToken cancellationToken)
         {
             var entities = await GetFromCacheStoreAsync(CarListCacheKey, cancellationToken).ConfigureAwait(false);
-            return Ok(entities);
+            return Ok(entities.Select(c => c.ToViewModel()));
         }
 
         /// <summary>
@@ -39,7 +40,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<Car>> GetCar(Guid id, CancellationToken cancellationToken)
+        public async Task<ActionResult<CarViewModel>> GetCar(Guid id, CancellationToken cancellationToken)
         {
             var entity = await Context.Cars.FirstOrDefaultAsync(e => e.Id == id, cancellationToken)
                 .ConfigureAwait(false);
@@ -48,7 +49,7 @@ namespace WebApi.Controllers
                 return NotFound();
             }
 
-            return Ok(entity);
+            return Ok(entity.ToViewModel());
         }
     }
 }
